@@ -30,7 +30,7 @@ EOF"
     #wget ${KUBE_URL}/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
     #wget ${KUBE_URL}/kubectl -O /usr/local/bin/kubectl
     #chmod +x /usr/local/bin/kubectl
-    ssh ${NODE} "export KUBE_URL=https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64
+    ssh ${NODE} "export KUBE_URL=https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64 && \
     if [ ! -x '/usr/local/bin/kubelet' ]; then
       #cp -f ~/k8s/install/kubelet /usr/local/bin/kubelet
       wget ${KUBE_URL}/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
@@ -46,7 +46,7 @@ EOF"
     echo "== download CNI @${NODE} =="
     ssh ${NODE} "mkdir -p /opt/cni/bin && cd /opt/cni/bin"
     #wget -qO- --show-progress "${CNI_URL}/v0.7.1/cni-plugins-amd64-v0.7.1.tgz" | tar -zx
-    ssh ${NODE} "export CNI_URL=https://github.com/containernetworking/plugins/releases/download
+    ssh ${NODE} "export CNI_URL=https://github.com/containernetworking/plugins/releases/download && \
     if [ ! '$(ls -A /opt/cni/bin)' ]; then
       wget "${CNI_URL}/v0.7.1/cni-plugins-amd64-v0.7.1.tgz"
       tar zxfv cni-plugins-amd64-v0.7.1.tgz -C /opt/cni/bin/
