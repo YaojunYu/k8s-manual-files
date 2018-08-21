@@ -65,9 +65,9 @@ if [ ! -x "/usr/local/bin/cfssljson" ]; then
   chmod +x /usr/local/bin/cfssljson
 fi
 
-echo ""
-echo "== git pull manual files =="
-git clone https://github.com/kairen/k8s-manual-files.git ~/k8s-manual-files
+#echo ""
+#echo "== git pull manual files =="
+#git clone https://github.com/kairen/k8s-manual-files.git ~/k8s-manual-files
 cd ~/k8s-manual-files/pki
 
 echo ""
