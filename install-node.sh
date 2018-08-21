@@ -30,15 +30,14 @@ EOF"
     #wget ${KUBE_URL}/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
     #wget ${KUBE_URL}/kubectl -O /usr/local/bin/kubectl
     #chmod +x /usr/local/bin/kubectl
-    ssh ${NODE} "export KUBE_URL=https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64 && \
-    if [ ! -x '/usr/local/bin/kubelet' ]; then
+    ssh ${NODE} "if [ ! -x '/usr/local/bin/kubelet' ]; then
       #cp -f ~/k8s/install/kubelet /usr/local/bin/kubelet
-      wget ${KUBE_URL}/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
+      wget https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
       chmod +x /usr/local/bin/kubelet
     fi
     if [ ! -x '/usr/local/bin/kubectl' ]; then
       #cp -f ~/k8s/install/kubectl /usr/local/bin/kubectl
-      wget ${KUBE_URL}/kubectl -O /usr/local/bin/kubectl --no-cookie --no-check-certificate
+      wget https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl --no-cookie --no-check-certificate
       chmod +x /usr/local/bin/kubectl
     fi"
 
@@ -46,9 +45,8 @@ EOF"
     echo "== download CNI @${NODE} =="
     ssh ${NODE} "mkdir -p /opt/cni/bin && cd /opt/cni/bin"
     #wget -qO- --show-progress "${CNI_URL}/v0.7.1/cni-plugins-amd64-v0.7.1.tgz" | tar -zx
-    ssh ${NODE} "export CNI_URL=https://github.com/containernetworking/plugins/releases/download && \
-    if [ ! '$(ls -A /opt/cni/bin)' ]; then
-      wget "${CNI_URL}/v0.7.1/cni-plugins-amd64-v0.7.1.tgz"
+    ssh ${NODE} "if [ ! '$(ls -A /opt/cni/bin)' ]; then
+      wget 'https://github.com/containernetworking/plugins/releases/download/v0.7.1/cni-plugins-amd64-v0.7.1.tgz'
       tar zxfv cni-plugins-amd64-v0.7.1.tgz -C /opt/cni/bin/
     fi"
 
