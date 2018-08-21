@@ -1,4 +1,4 @@
-for NODE in k8s-m1; do
+for NODE in k8s-m1 k8s-m2 k8s-m3; do
     ssh ${NODE} "systemctl stop docker && systemctl stop kubelet"
     ssh ${NODE} "rm -rf /etc/kubernetes && rm -rf ~/.kube && rm -rf /etc/etcd && rm -rf /var/lib/kubelet && rm -rf /var/log/kubernetes && rm -rf /var/lib/etcd && rm -rf /etc/systemd/system/kubelet.service.d"
     echo ""
@@ -80,7 +80,7 @@ cfssl gencert \
   -profile=kubernetes \
   etcd-csr.json | cfssljson -bare ${DIR}/etcd
 rm -rf ${DIR}/*.csr
-for NODE in k8s-m2; do
+for NODE in k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     ssh ${NODE} " mkdir -p /etc/etcd/ssl"
     for FILE in etcd-ca-key.pem  etcd-ca.pem  etcd-key.pem  etcd.pem; do
@@ -92,7 +92,7 @@ echo ""
 echo "== create ca & certs for components =="
 export K8S_DIR=/etc/kubernetes
 export PKI_DIR=${K8S_DIR}/pki
-export KUBE_APISERVER=https://192.168.1.99:6443
+export KUBE_APISERVER=https://10.128.0.2:6443
 mkdir -p ${PKI_DIR}
 cfssl gencert -initca ca-csr.json | cfssljson -bare ${PKI_DIR}/ca
 
@@ -100,7 +100,7 @@ cfssl gencert \
   -ca=${PKI_DIR}/ca.pem \
   -ca-key=${PKI_DIR}/ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.96.0.1,192.168.1.99,127.0.0.1,kubernetes.default \
+  -hostname=10.96.0.1,10.128.0.2,127.0.0.1,kubernetes.default \
   -profile=kubernetes \
   apiserver-csr.json | cfssljson -bare ${PKI_DIR}/apiserver
 
@@ -181,7 +181,7 @@ kubectl config use-context kubernetes-admin@kubernetes \
     --kubeconfig=${K8S_DIR}/admin.conf
 
 
-for NODE in k8s-m1 k8s-m2; do
+for NODE in k8s-m1 k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     cp kubelet-csr.json kubelet-$NODE-csr.json;
     sed -i "s/\$NODE/$NODE/g" kubelet-$NODE-csr.json;
@@ -194,7 +194,7 @@ for NODE in k8s-m1 k8s-m2; do
       kubelet-$NODE-csr.json | cfssljson -bare ${PKI_DIR}/kubelet-$NODE;
     rm kubelet-$NODE-csr.json
   done
-for NODE in k8s-m1 k8s-m2; do
+for NODE in k8s-m1 k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     ssh ${NODE} "mkdir -p ${PKI_DIR}"
     scp ${PKI_DIR}/ca.pem ${NODE}:${PKI_DIR}/ca.pem
@@ -202,7 +202,7 @@ for NODE in k8s-m1 k8s-m2; do
     scp ${PKI_DIR}/kubelet-$NODE.pem ${NODE}:${PKI_DIR}/kubelet.pem
     rm ${PKI_DIR}/kubelet-$NODE-key.pem ${PKI_DIR}/kubelet-$NODE.pem
   done
-for NODE in k8s-m1 k8s-m2; do
+for NODE in k8s-m1 k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     ssh ${NODE} "cd ${PKI_DIR} && \
       kubectl config set-cluster kubernetes \
@@ -230,13 +230,13 @@ rm -rf ${PKI_DIR}/*.csr \
     ${PKI_DIR}/controller-manager*.pem \
     ${PKI_DIR}/admin*.pem \
     ${PKI_DIR}/kubelet*.pem
-for NODE in k8s-m2; do
+for NODE in k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     for FILE in $(ls ${PKI_DIR}); do
       scp ${PKI_DIR}/${FILE} ${NODE}:${PKI_DIR}/${FILE}
     done
   done
-for NODE in k8s-m2; do
+for NODE in k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     for FILE in admin.conf controller-manager.conf scheduler.conf; do
       scp ${K8S_DIR}/${FILE} ${NODE}:${K8S_DIR}/${FILE}
@@ -246,10 +246,10 @@ for NODE in k8s-m2; do
 echo ""
 echo "== set master =="
 cd ~/k8s-manual-files
-export NODES="k8s-m1 k8s-m2"
+export NODES="k8s-m1 k8s-m2 k8s-m3"
 ./hack/gen-configs.sh
 ./hack/gen-manifests.sh
-for NODE in k8s-m1 k8s-m2; do
+for NODE in k8s-m1 k8s-m2 k8s-m3; do
     echo "--- $NODE ---"
     ssh ${NODE} "mkdir -p /var/lib/kubelet /var/log/kubernetes /var/lib/etcd /etc/systemd/system/kubelet.service.d"
     scp master/var/lib/kubelet/config.yml ${NODE}:/var/lib/kubelet/config.yml
@@ -259,7 +259,7 @@ for NODE in k8s-m1 k8s-m2; do
 
 echo ""
 echo "== start kubelet at all master nodes =="
-for NODE in k8s-m1 k8s-m2; do
+for NODE in k8s-m1 k8s-m2 k8s-m3; do
     ssh ${NODE} "systemctl enable kubelet.service && systemctl start kubelet.service"
   done
 
