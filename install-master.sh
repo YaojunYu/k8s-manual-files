@@ -288,7 +288,7 @@ kubectl config use-context tls-bootstrap-token-user@kubernetes \
 
 cp /etc/kubernetes/admin.conf ~/.kube/config
 
-sleep 10;
+sleep 30;
 
 cat <<EOF | kubectl create -f -
 apiVersion: v1
