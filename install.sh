@@ -27,26 +27,29 @@ EOF"
 
     echo ""
     echo "== install kubelet & kubectl @${NODE} =="
-    #export KUBE_URL=https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64
+    export KUBE_URL=https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64
     #wget ${KUBE_URL}/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
     #wget ${KUBE_URL}/kubectl -O /usr/local/bin/kubectl
     #chmod +x /usr/local/bin/kubectl
     ssh ${NODE} "if [ ! -x '/usr/local/bin/kubelet' ]; then
-      cp -f ~/k8s/install/kubelet /usr/local/bin/kubelet
+      #cp -f ~/k8s/install/kubelet /usr/local/bin/kubelet
+      wget ${KUBE_URL}/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
       chmod +x /usr/local/bin/kubelet
     fi
     if [ ! -x '/usr/local/bin/kubectl' ]; then
-      cp -f ~/k8s/install/kubectl /usr/local/bin/kubectl
+      #cp -f ~/k8s/install/kubectl /usr/local/bin/kubectl
+      wget ${KUBE_URL}/kubectl -O /usr/local/bin/kubectl --no-cookie --no-check-certificate
       chmod +x /usr/local/bin/kubectl
     fi"
 
     echo ""
     echo "== download CNI @${NODE} =="
-    #export CNI_URL=https://github.com/containernetworking/plugins/releases/download
+    export CNI_URL=https://github.com/containernetworking/plugins/releases/download
     ssh ${NODE} "mkdir -p /opt/cni/bin && cd /opt/cni/bin"
     #wget -qO- --show-progress "${CNI_URL}/v0.7.1/cni-plugins-amd64-v0.7.1.tgz" | tar -zx
     ssh ${NODE} "if [ ! '$(ls -A /opt/cni/bin)' ]; then
-      tar zxfv ~/k8s/install/cni-plugins-amd64-v0.7.1.tgz -C /opt/cni/bin/
+      wget "${CNI_URL}/v0.7.1/cni-plugins-amd64-v0.7.1.tgz"
+      tar zxfv cni-plugins-amd64-v0.7.1.tgz -C /opt/cni/bin/
     fi"
 done
 
@@ -76,7 +79,7 @@ cfssl gencert \
   -ca=${DIR}/etcd-ca.pem \
   -ca-key=${DIR}/etcd-ca-key.pem \
   -config=ca-config.json \
-  -hostname=127.0.0.1,192.168.1.10 \
+  -hostname=127.0.0.1,10.128.0.2,10.128.0.3,10.142.0.2 \
   -profile=kubernetes \
   etcd-csr.json | cfssljson -bare ${DIR}/etcd
 rm -rf ${DIR}/*.csr
