@@ -1,4 +1,5 @@
-for NODE in k8s-m1 k8s-m2 k8s-m3; do
+for NODE in k8s-m1 k8s-m2 k8s-m3 k8s-n1; do
+    echo "====${NODE}===="
     ssh ${NODE} "yum install ipvsadm -y && \
                 ipvsadm && \
                 cat > /etc/sysconfig/modules/ipvs.modules <<EOF
