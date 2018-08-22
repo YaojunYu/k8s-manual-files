@@ -316,11 +316,25 @@ echo "===install node==="
 echo "====install kube-proxy===="
 ./ipvs.sh
 sed -i "s/\${KUBE_APISERVER}/${KUBE_APISERVER}/g" addons/kube-proxy/kube-proxy-cm.yml
+kubectl delete -f addons/kube-proxy/
 kubectl create -f addons/kube-proxy/
 kubectl -n kube-system get po -l k8s-app=kube-proxy
 
 echo "=======install flannel========="
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml  
+
+
+eho "====install kube mestic server==="
+kubectl delete -f addons/metric-server/
+kubectl create -f addons/metric-server/
+
+eho "====install kube dashboard==="
+kubectl delete -f addons/dashboard/
+kubectl create -f addons/dashboard/
+
+eho "====install kube dashboard==="
+kubectl delete -f addons/ingress-controller/
+kubectl create -f addons/ingress-controller/
 
 echo "====finished===="
 kubectl get all --all-namespaces
