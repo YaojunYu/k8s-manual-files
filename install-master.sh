@@ -94,7 +94,7 @@ echo ""
 echo "== create ca & certs for components =="
 export K8S_DIR=/etc/kubernetes
 export PKI_DIR=${K8S_DIR}/pki
-export KUBE_APISERVER=https://35.241.2.164:443
+export KUBE_APISERVER=https://10.128.0.2:6443
 mkdir -p ${PKI_DIR}
 cfssl gencert -initca ca-csr.json | cfssljson -bare ${PKI_DIR}/ca
 
@@ -102,7 +102,7 @@ cfssl gencert \
   -ca=${PKI_DIR}/ca.pem \
   -ca-key=${PKI_DIR}/ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.96.0.1,35.241.2.164,127.0.0.1,kubernetes.default \
+  -hostname=10.96.0.1,10.128.0.2,127.0.0.1,kubernetes.default \
   -profile=kubernetes \
   apiserver-csr.json | cfssljson -bare ${PKI_DIR}/apiserver
 
