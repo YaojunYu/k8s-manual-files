@@ -43,7 +43,7 @@ data:
     clusters:
     - cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        server: https://10.128.0.2:6443
+        server: https://35.241.2.164:443
       name: kubernetes
     contexts:
     - context:
