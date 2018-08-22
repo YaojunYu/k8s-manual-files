@@ -43,11 +43,11 @@ data:
     clusters:
     - cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        server: ${KUBE_APISERVER}
-      name: default
+        server: https://172.22.132.9:6443
+      name: kubernetes
     contexts:
     - context:
-        cluster: default
+        cluster: kubernetes
         namespace: default
         user: default
       name: default
