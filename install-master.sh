@@ -55,11 +55,11 @@ done
 echo ""
 echo "== install CFSSL =="
 export CFSSL_URL=https://pkg.cfssl.org/R1.2
-if [ ! -x "/usr/local/bin/cfssl" ]; then
+if [ ! -x "/usr/local/sbin/cfssl" ]; then
   wget ${CFSSL_URL}/cfssl_linux-amd64 -O /usr/local/sbin/cfssl
   chmod +x /usr/local/sbin/cfssl
 fi
-if [ ! -x "/usr/local/bin/cfssljson" ]; then 
+if [ ! -x "/usr/local/sbin/cfssljson" ]; then 
   wget ${CFSSL_URL}/cfssljson_linux-amd64 -O /usr/local/sbin/cfssljson
   chmod +x /usr/local/sbin/cfssljson
 fi
