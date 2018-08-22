@@ -261,7 +261,7 @@ for NODE in k8s-m1 k8s-m2 k8s-m3; do
 echo ""
 echo "== start kubelet at all master nodes =="
 for NODE in k8s-m1 k8s-m2 k8s-m3; do
-    ssh ${NODE} "systemctl enable kubelet.service && systemctl start kubelet.service"
+    ssh ${NODE} "systemctl daemon-reload && systemctl enable kubelet.service && systemctl start kubelet.service"
   done
 
 echo ""
