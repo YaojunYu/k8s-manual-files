@@ -321,7 +321,7 @@ kubectl create -f addons/kube-proxy/
 kubectl -n kube-system get po -l k8s-app=kube-proxy
 
 echo "=======install flannel========="
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml  
+kubectl create -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml  
 
 
 eho "====install kube mestic server==="
