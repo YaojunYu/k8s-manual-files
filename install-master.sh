@@ -306,5 +306,22 @@ stringData:
 EOF
 kubectl apply -f master/resources/kubelet-bootstrap-rbac.yml
 kubectl apply -f master/resources/apiserver-to-kubelet-rbac.yml
-kubectl taint nodes node-role.kubernetes.io/master="":NoSchedule --all
+# kubectl taint nodes node-role.kubernetes.io/master="":NoSchedule --all
 
+cd ~/k8s-manual-files
+
+echo "===install node==="
+./install-node.sh
+
+echo "====install kube-proxy===="
+./ipvs.sh
+sed -i "s/\${KUBE_APISERVER}/${KUBE_APISERVER}/g" addons/kube-proxy/kube-proxy-cm.yml
+kubectl create -f addons/kube-proxy/
+kubectl -n kube-system get po -l k8s-app=kube-proxy
+
+echo "=======install flannel========="
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml  
+
+echo "====finished===="
+kubectl get all --all-namespaces
+kubectl get nodes
