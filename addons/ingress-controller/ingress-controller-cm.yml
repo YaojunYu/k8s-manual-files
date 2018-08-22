@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: nginx-configuration
-  namespace: ingress-nginx
+  namespace: kube-system
   labels:
     app: ingress-nginx
 ---
@@ -10,7 +10,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: tcp-services
-  namespace: ingress-nginx
+  namespace: kube-system
 data:
   53: "external-dns/coredns-tcp:53"
 ---
@@ -18,6 +18,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: udp-services
-  namespace: ingress-nginx
+  namespace: kube-system
 data:
   53: "external-dns/coredns-udp:53"

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ingress-nginx
-  namespace: ingress-nginx
+  namespace: kube-system
   labels:
     app: ingress-nginx
 spec:
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: default-http-backend
-  namespace: ingress-nginx
+  namespace: kube-system
   labels:
     app: default-http-backend
 spec:

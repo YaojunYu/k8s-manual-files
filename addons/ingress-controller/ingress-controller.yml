@@ -4,7 +4,7 @@ metadata:
   name: default-http-backend
   labels:
     app: default-http-backend
-  namespace: ingress-nginx
+  namespace: kube-system
 spec:
   replicas: 1
   selector:
@@ -40,7 +40,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: nginx-ingress-controller
-  namespace: ingress-nginx
+  namespace: kube-system
 spec:
   replicas: 1
   selector:
