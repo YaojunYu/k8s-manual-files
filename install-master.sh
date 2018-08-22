@@ -101,7 +101,7 @@ cfssl gencert \
   -ca=${PKI_DIR}/ca.pem \
   -ca-key=${PKI_DIR}/ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.96.0.1,10.128.0.2,127.0.0.1,kubernetes.default \
+  -hostname=10.128.0.2,127.0.0.1,kubernetes.default \
   -profile=kubernetes \
   apiserver-csr.json | cfssljson -bare ${PKI_DIR}/apiserver
 
@@ -305,4 +305,4 @@ stringData:
 EOF
 kubectl apply -f master/resources/kubelet-bootstrap-rbac.yml
 kubectl apply -f master/resources/apiserver-to-kubelet-rbac.yml
-# kubectl taint nodes node-role.kubernetes.io/master="":NoSchedule --all
+kubectl taint nodes node-role.kubernetes.io/master="":NoSchedule --all
