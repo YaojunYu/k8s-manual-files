@@ -62,7 +62,7 @@ EOF"
     scp node/systemd/kubelet.service ${NODE}:/lib/systemd/system/kubelet.service
     scp node/systemd/10-kubelet.conf ${NODE}:/etc/systemd/system/kubelet.service.d/10-kubelet.conf
 
-    ssh ${NODE} "systemctl enable kubelet.service && systemctl start kubelet.service"
+    ssh ${NODE} "systemctl start kubelet.service && systemctl enable kubelet.service"
 
 done
 
