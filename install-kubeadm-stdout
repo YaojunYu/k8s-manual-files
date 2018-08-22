@@ -1,0 +1,106 @@
+[root@k8s-m1 k8s-manual-files]# kubeadm init --service-cidr 10.96.0.0/12 --pod-network-cidr 10.244.0.0/16 --apiserv
+er-advertise-address 10.128.0.2
+[init] using Kubernetes version: v1.11.2
+[preflight] running pre-flight checks
+I0822 07:59:25.922770   16252 kernel_validator.go:81] Validating kernel version
+I0822 07:59:25.922948   16252 kernel_validator.go:96] Validating kernel config
+        [WARNING SystemVerification]: docker version is greater than the most recently validated version. Docker ve
+rsion: 18.06.1-ce. Max validated version: 17.03
+[preflight/images] Pulling images required for setting up a Kubernetes cluster
+[preflight/images] This might take a minute or two, depending on the speed of your internet connection
+[preflight/images] You can also perform this action in beforehand using 'kubeadm config images pull'
+[kubelet] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[preflight] Activating the kubelet service
+[certificates] Generated ca certificate and key.
+[certificates] Generated apiserver certificate and key.
+[certificates] apiserver serving cert is signed for DNS names [k8s-m1 kubernetes kubernetes.default kubernetes.defa
+ult.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 10.128.0.2]
+[certificates] Generated apiserver-kubelet-client certificate and key.
+[certificates] Generated sa key and public key.
+[certificates] Generated front-proxy-ca certificate and key.
+[certificates] Generated front-proxy-client certificate and key.
+[certificates] Generated etcd/ca certificate and key.
+[certificates] Generated etcd/server certificate and key.
+[certificates] etcd/server serving cert is signed for DNS names [k8s-m1 localhost] and IPs [127.0.0.1 ::1]
+[certificates] Generated etcd/peer certificate and key.
+[certificates] etcd/peer serving cert is signed for DNS names [k8s-m1 localhost] and IPs [10.128.0.2 127.0.0.1 ::1]
+[certificates] Generated etcd/healthcheck-client certificate and key.
+[certificates] Generated apiserver-etcd-client certificate and key.
+[certificates] valid certificates and keys now exist in "/etc/kubernetes/pki"
+[kubeconfig] Wrote KubeConfig file to disk: "/etc/kubernetes/admin.conf"
+[kubeconfig] Wrote KubeConfig file to disk: "/etc/kubernetes/kubelet.conf"
+[kubeconfig] Wrote KubeConfig file to disk: "/etc/kubernetes/controller-manager.conf"
+[kubeconfig] Wrote KubeConfig file to disk: "/etc/kubernetes/scheduler.conf"
+[controlplane] wrote Static Pod manifest for component kube-apiserver to "/etc/kubernetes/manifests/kube-apiserver.yaml"
+[controlplane] wrote Static Pod manifest for component kube-controller-manager to "/etc/kubernetes/manifests/kube-controller-manager.yaml"
+[controlplane] wrote Static Pod manifest for component kube-scheduler to "/etc/kubernetes/manifests/kube-scheduler.yaml"
+[etcd] Wrote Static Pod manifest for a local etcd instance to "/etc/kubernetes/manifests/etcd.yaml"
+[init] waiting for the kubelet to boot up the control plane as Static Pods from directory "/etc/kubernetes/manifests" 
+[init] this might take a minute or longer if the control plane images have to be pulled
+[apiclient] All control plane components are healthy after 38.502155 seconds
+[uploadconfig] storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[kubelet] Creating a ConfigMap "kubelet-config-1.11" in namespace kube-system with the configuration for the kubelets in the cluster
+[markmaster] Marking the node k8s-m1 as master by adding the label "node-role.kubernetes.io/master=''"
+[markmaster] Marking the node k8s-m1 as master by adding the taints [node-role.kubernetes.io/master:NoSchedule]
+[patchnode] Uploading the CRI Socket information "/var/run/dockershim.sock" to the Node API object "k8s-m1" as an annotation
+[bootstraptoken] using token: l4o5rl.y0xr3cck26jeic7k
+[bootstraptoken] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstraptoken] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstraptoken] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstraptoken] creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes master has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join 10.128.0.2:6443 --token l4o5rl.y0xr3cck26jeic7k --discovery-token-ca-cert-hash sha256:03c765cda56793
+a0e9eb9a1c648523a58857da0a92bcdd1e3801f38edab8eb4e
+
+
+
+[root@k8s-n1 ~]# kubeadm join 10.128.0.2:6443 --token l4o5rl.y0xr3cck26jeic7k --discovery-token-ca-cert-hash sha256
+:03c765cda56793a0e9eb9a1c648523a58857da0a92bcdd1e3801f38edab8eb4e
+[preflight] running pre-flight checks
+        [WARNING RequiredIPVSKernelModulesAvailable]: the IPVS proxier will not be used, because the following requ
+ired kernel modules are not loaded: [ip_vs_rr ip_vs_wrr ip_vs_sh] or no builtin kernel ipvs support: map[nf_conntra
+ck_ipv4:{} ip_vs:{} ip_vs_rr:{} ip_vs_wrr:{} ip_vs_sh:{}]
+you can solve this problem with following methods:
+ 1. Run 'modprobe -- ' to load missing kernel modules;
+2. Provide the missing builtin kernel ipvs support
+I0822 08:17:34.396764    7507 kernel_validator.go:81] Validating kernel version
+I0822 08:17:34.396915    7507 kernel_validator.go:96] Validating kernel config
+        [WARNING SystemVerification]: docker version is greater than the most recently validated version. Docker ve
+rsion: 18.06.0-ce. Max validated version: 17.03
+[discovery] Trying to connect to API Server "10.128.0.2:6443"
+[discovery] Created cluster-info discovery client, requesting info from "https://10.128.0.2:6443"
+[discovery] Requesting info from "https://10.128.0.2:6443" again to validate TLS against the pinned public key
+[discovery] Cluster info signature and contents are valid and TLS certificate validates against pinned roots, will 
+use API Server "10.128.0.2:6443"
+[discovery] Successfully established connection with API Server "10.128.0.2:6443"
+[kubelet] Downloading configuration for the kubelet from the "kubelet-config-1.11" ConfigMap in the kube-system nam
+espace
+[kubelet] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[preflight] Activating the kubelet service
+[tlsbootstrap] Waiting for the kubelet to perform the TLS Bootstrap...
+[patchnode] Uploading the CRI Socket information "/var/run/dockershim.sock" to the Node API object "k8s-n1" as an annotation
+
+This node has joined the cluster:
+* Certificate signing request was sent to master and a response
+  was received.
+* The Kubelet was informed of the new secure connection details.
+Run 'kubectl get nodes' on the master to see this node join the cluster.
