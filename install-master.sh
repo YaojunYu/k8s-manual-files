@@ -1,8 +1,8 @@
 for NODE in k8s-m1 k8s-m2 k8s-m3; do
     ssh ${NODE} "systemctl stop docker && systemctl stop kubelet"
-    if [ "$(df -HT | grep '/var/lib/kubelet/pods' | awk '{print \$7}')" ]; then
-      ssh ${NODE} "umount \$(df -HT | grep '/var/lib/kubelet/pods' | awk '{print \$7}')"
-      ssh ${NODE} "umount \$(df -HT | grep '/var/lib/kubelet/pods' | awk '{print \$7}')"
+    if [ "$(df -HT | grep '/var/lib/kubelet/pods' | awk '{print $7}')" ]; then
+      ssh ${NODE} "umount $(df -HT | grep '/var/lib/kubelet/pods' | awk '{print $7}')"
+      ssh ${NODE} "umount $(df -HT | grep '/var/lib/kubelet/pods' | awk '{print $7}')"
     fi
     
     ssh ${NODE} "rm -rf /etc/kubernetes && rm -rf ~/.kube && rm -rf /etc/etcd && rm -rf /var/lib/kubelet && rm -rf /var/log/kubernetes && rm -rf /var/lib/etcd && rm -rf /etc/systemd/system/kubelet.service.d && rm -rf /usr/local/bin/kubelet && rm -rf /usr/local/bin/kubectl"
@@ -36,13 +36,12 @@ EOF"
     #wget ${KUBE_URL}/kubectl -O /usr/local/bin/kubectl
     #chmod +x /usr/local/bin/kubectl
     ssh ${NODE} "if [ ! -x '/usr/local/bin/kubelet' ]; then
-      #cp -f ~/k8s/install/kubelet /usr/local/bin/kubelet
-      wget https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubelet -O /usr/local/bin/kubelet --no-cookie --no-check-certificate
+      curl -o /usr/local/bin/kubelet https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubelet -k
       chmod +x /usr/local/bin/kubelet
     fi
     if [ ! -x '/usr/local/bin/kubectl' ]; then
       #cp -f ~/k8s/install/kubectl /usr/local/bin/kubectl
-      wget https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl --no-cookie --no-check-certificate
+      curl -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.11.0/bin/linux/amd64/kubectl -k
       chmod +x /usr/local/bin/kubectl
     fi"
 
