@@ -1,5 +1,5 @@
   for NODE in k8s-n1; do
-    ssh ${NODE} "systemctl stop docker && systemctl stop kubelet"
+    ssh ${NODE} "systemctl stop docker && systemctl stop kubelet && systemctl disable kubelet.service"
     ssh ${NODE} "rm -rf /etc/kubernetes && rm -rf ~/.kube && rm -rf /etc/etcd && rm -rf /var/lib/kubelet && rm -rf /var/log/kubernetes && rm -rf /var/lib/etcd && rm -rf /etc/systemd/system/kubelet.service.d && rm -rf /usr/local/bin/kubelet && rm -rf /usr/local/bin/kubectl"
     echo ""
     echo "== stop & disable firewalld, set SELINUX disabled @${NODE} =="
@@ -62,7 +62,7 @@ EOF"
     scp node/systemd/kubelet.service ${NODE}:/lib/systemd/system/kubelet.service
     scp node/systemd/10-kubelet.conf ${NODE}:/etc/systemd/system/kubelet.service.d/10-kubelet.conf
 
-    ssh ${NODE} "systemctl start kubelet.service && systemctl enable kubelet.service"
+    ssh ${NODE} "systemctl daemon-reload && systemctl start kubelet.service && systemctl enable kubelet.service"
 
 done
 
