@@ -248,6 +248,7 @@ echo ""
 echo "== set master =="
 cd ~/k8s-manual-files
 export NODES="k8s-m1 k8s-m2 k8s-m3"
+export ADVERTISE_VIP="10.128.0.2"
 ./hack/gen-configs.sh
 ./hack/gen-manifests.sh
 for NODE in k8s-m1 k8s-m2 k8s-m3; do
