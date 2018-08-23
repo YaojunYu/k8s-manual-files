@@ -1,6 +1,6 @@
   for NODE in k8s-n1; do
     ssh ${NODE} "systemctl stop docker && systemctl stop kubelet && systemctl disable kubelet.service"
-    ssh ${NODE} "umount $(df -HT | grep '/var/lib/kubelet/pods' | awk '{print $7}')"
+    ssh ${NODE} "umount \$(df -HT | grep '/var/lib/kubelet/pods' | awk '{print \$7}')"
     ssh ${NODE} "rm -rf /var/lib/kubelet && rm -rf /etc/kubernetes && rm -rf ~/.kube && rm -rf /etc/etcd && rm -rf /var/log/kubernetes && rm -rf /var/lib/etcd && rm -rf /etc/systemd/system/kubelet.service.d && rm -rf /usr/local/bin/kubelet && rm -rf /usr/local/bin/kubectl"
     echo ""
     echo "== stop & disable firewalld, set SELINUX disabled @${NODE} =="
